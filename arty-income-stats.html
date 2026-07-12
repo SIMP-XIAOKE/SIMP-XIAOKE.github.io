@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自行火炮收入统计表 - SIMP-WOT</title>
+    <link rel="stylesheet" href="css/common.css">
+    <style>
+        /* Stats Bar */
+        .stats-bar { display: flex; justify-content: space-between; margin-bottom: 25px; gap: 10px; flex-wrap: wrap; }
+        .stat-item { flex: 1; text-align: center; padding: 15px 10px; background: var(--color-primary-light); border-radius: 8px; border: 1px solid rgba(212,63,58,0.15); transition: transform .2s; }
+        .stat-item:hover { transform: translateY(-3px); }
+        .stat-value { font-size: 1.6rem; font-weight: bold; color: var(--color-primary); }
+        .stat-label { font-size: .85rem; color: var(--color-text-light); margin-top: 4px; }
+
+        /* Controls */
+        .controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px; }
+        .search-container { flex: 1; min-width: 250px; }
+        .search-box { position: relative; }
+        .search-box input { width: 100%; padding: 12px 18px 12px 42px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; outline: none; transition: all .3s; }
+        .search-box input:focus { border-color: var(--color-primary); box-shadow: 0 0 0 3px var(--color-primary-light); }
+        .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--color-text-light); font-size: 1.1rem; }
+        .filters { display: flex; gap: 8px; flex-wrap: wrap; }
+        .filter-btn { padding: 8px 16px; background: var(--color-primary-light); border: 1px solid rgba(212,63,58,0.25); color: var(--color-primary); border-radius: 6px; cursor: pointer; font-weight: 500; font-size: 14px; transition: all .2s; }
+        .filter-btn:hover { background: rgba(212,63,58,0.15); }
+        .filter-btn.active { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
+
+        /* Table */
+        .table-container { overflow-x: auto; border-radius: 8px; border: 1px solid #f0f2f5; box-shadow: var(--shadow-sm); margin-bottom: 25px; }
+        table { width: 100%; border-collapse: collapse; }
+        thead { background: var(--color-primary); }
+        th { padding: 16px 12px; text-align: center; font-weight: 600; color: #fff; font-size: 15px; }
+        th.sortable { cursor: pointer; position: relative; }
+        th.sortable:hover { background: var(--color-primary-dark); }
+        th.sortable::after { content: '↕'; margin-left: 6px; opacity: .7; font-size: .85rem; }
+        th.not-sortable { cursor: default; }
+        th.not-sortable::after { content: ''; }
+        tbody tr { border-bottom: 1px solid #f0f2f5; transition: background .2s; }
+        tbody tr:nth-child(even) { background: #fafafa; }
+        tbody tr:hover { background: var(--color-primary-light); }
+        td { padding: 14px 12px; text-align: center; font-size: 14px; color: #444; }
+        .tank-name { font-weight: bold; color: var(--color-text); }
+        .level-cell { font-weight: 600; padding: 4px 10px; background: var(--color-primary-light); border-radius: 4px; color: var(--color-primary); border: 1px solid rgba(212,63,58,0.2); display: inline-block; }
+        .country-cell { color: var(--color-text-light); }
+        .damage-cell { color: #27ae60; font-weight: 600; }
+        .wn8-cell { font-weight: 600; }
+        .income-cell { font-weight: bold; font-size: 1.1rem; color: #27ae60; }
+        .wn8-badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: .8rem; font-weight: 600; margin-left: 6px; }
+        .wn8-badge.good { background: rgba(46,204,113,0.15); color: #27ae60; border: 1px solid rgba(46,204,113,0.3); }
+        .wn8-badge.average { background: rgba(241,196,15,0.15); color: #f39c12; border: 1px solid rgba(241,196,15,0.3); }
+        .wn8-badge.poor { background: rgba(231,76,60,0.15); color: #e74c3c; border: 1px solid rgba(231,76,60,0.3); }
+
+        /* Footer Data Notes */
+        .data-notes { font-size: .9rem; color: var(--color-text-light); line-height: 1.7; }
+        .data-notes h3 { color: var(--color-accent); font-size: 1.1rem; margin-bottom: 10px; }
+        .data-notes ul { list-style: none; padding: 0; }
+        .data-notes li { margin-bottom: 6px; padding-left: 18px; position: relative; }
+        .data-notes li::before { content: "•"; color: var(--color-primary); position: absolute; left: 0; font-weight: bold; }
+
+        @media (max-width: 768px) {
+            .controls { flex-direction: column; }
+            .search-container { width: 100%; min-width: unset; }
+            .filters { justify-content: center; }
+            .stats-bar { flex-direction: column; }
+            th, td { padding: 10px 8px; font-size: 13px; }
+            .stat-value { font-size: 1.3rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="site-header">
+    <a href="index.html" class="logo">
+        <img src="assets/images/your-logo.png" alt="SIMP Logo">
+        <span>SIMP for WOT</span>
+    </a>
+    <a href="index.html" class="back-link">← 返回首页</a>
+</header>
+
+<main class="page-container">
+    <div class="content-card">
+        <h1 class="page-title">坦克世界自行火炮收入统计表</h1>
+        <p class="page-subtitle">更新日期：2026年02月05日 | 数据来源：SIMP服务器过去30天全球统计</p>
+
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-value">26</div>
+                <div class="stat-label">统计数量</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">35,263</div>
+                <div class="stat-label">最高收入(银币)</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">1,708</div>
+                <div class="stat-label">最高WN8</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">Ⅴ-Ⅹ</div>
+                <div class="stat-label">等级范围</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="search-container">
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="searchInput" placeholder="搜索坦克名称、国家或等级...">
+                </div>
+            </div>
+            <div class="filters">
+                <button class="filter-btn active" data-filter="all">全部</button>
+                <button class="filter-btn" data-filter="v">Ⅴ级</button>
+                <button class="filter-btn" data-filter="vi">Ⅵ级</button>
+                <button class="filter-btn" data-filter="vii">Ⅶ级</button>
+                <button class="filter-btn" data-filter="viii">Ⅷ级</button>
+                <button class="filter-btn" data-filter="ix">Ⅸ级</button>
+                <button class="filter-btn" data-filter="x">Ⅹ级</button>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table id="tankTable">
+                <thead>
+                    <tr>
+                        <th class="not-sortable">坦克名称</th>
+                        <th class="sortable" data-sort="level">等级</th>
+                        <th class="sortable" data-sort="country">国家</th>
+                        <th class="sortable" data-sort="damage">平均伤害</th>
+                        <th class="sortable" data-sort="wn8">WN8</th>
+                        <th class="sortable" data-sort="income">平均收入(银币)</th>
+                    </tr>
+                </thead>
+                <tbody id="tankList"></tbody>
+            </table>
+        </div>
+
+        <div class="data-notes">
+            <h3>数据说明</h3>
+            <ul>
+                <li>以上是SIMP服务器过去30天全球统计数据。</li>
+                <li>收入是指统计上万场比赛，在每场比赛中所获得银币的平均值。</li>
+                <li>伤害是指统计上万场比赛，在每场比赛中所造成伤害的平均值。</li>
+                <li>WN8是指统计上万场比赛，在每场比赛中所表现的平均值。</li>
+                <li>WN8等级：≥1500(优秀)，1000-1499(平均)，&lt;1000(一般)。</li>
+                <li>部分坦克数据较低或没做统计，所有这里不会显示。</li>
+                <li>以上数据仅作为参考，实际游戏体验可能因个人技术、装备配置等因素有所不同。</li>
+            </ul>
+        </div>
+    </div>
+</main>
+
+<script>
+const tankData = [
+    { income: 35263, level: "Ⅴ级", country: "F系/法国", name: "105 leFH18B2", damage: 845, wn8: 1708 },
+    { income: 28632, level: "Ⅵ级", country: "D系/德国", name: "野蜂", damage: 699, wn8: 974 },
+    { income: 27805, level: "Ⅵ级", country: "F系/法国", name: "AMX 13 F3 AM", damage: 722, wn8: 999 },
+    { income: 22827, level: "Ⅶ级", country: "F系/法国", name: "洛林155 50", damage: 794, wn8: 912 },
+    { income: 22438, level: "Ⅶ级", country: "S系/苏联", name: "SU-14-1", damage: 811, wn8: 1157 },
+    { income: 22269, level: "Ⅵ级", country: "M系/美国", name: "M44", damage: 559, wn8: 814 },
+    { income: 22083, level: "Ⅵ级", country: "S系/苏联", name: "SU-8", damage: 686, wn8: 910 },
+    { income: 20892, level: "Ⅶ级", country: "S系/苏联", name: "S-51", damage: 739, wn8: 830 },
+    { income: 20384, level: "Ⅶ级", country: "Y系/英国", name: "十字军SP", damage: 663, wn8: 857 },
+    { income: 19342, level: "Ⅶ级", country: "D系/德国", name: "黑豹自行火炮", damage: 809, wn8: 912 },
+    { income: 18760, level: "Ⅶ级", country: "M系/美国", name: "M12", damage: 764, wn8: 877 },
+    { income: 18446, level: "Ⅸ级", country: "Y系/英国", name: "FV3805", damage: 1003, wn8: 931 },
+    { income: 16522, level: "Ⅷ级", country: "Y系/英国", name: "FV207", damage: 935, wn8: 1045 },
+    { income: 16385, level: "X级", country: "F系/法国", name: "查狄伦155", damage: 1270, wn8: 1039 },
+    { income: 15630, level: "Ⅷ级", country: "D系/德国", name: "虎(P)式自行火炮", damage: 913, wn8: 1026 },
+    { income: 15489, level: "X级", country: "D系/德国", name: "GWE系列", damage: 1350, wn8: 1085 },
+    { income: 13482, level: "Ⅷ级", country: "S系/苏联", name: "SU-14-2", damage: 914, wn8: 910 },
+    { income: 13080, level: "Ⅸ级", country: "F系/法国", name: "查狄伦155 55", damage: 1053, wn8: 975 },
+    { income: 13022, level: "X级", country: "S系/苏联", name: "261工程", damage: 1489, wn8: 1253 },
+    { income: 12770, level: "Ⅷ级", country: "M系/美国", name: "M40/M43", damage: 941, wn8: 954 },
+    { income: 12439, level: "Ⅷ级", country: "F系/法国", name: "洛林155 51", damage: 851, wn8: 842 },
+    { income: 12197, level: "Ⅸ级", country: "M系/美国", name: "M53/M55", damage: 985, wn8: 878 },
+    { income: 12196, level: "X级", country: "M系/美国", name: "T92 HMC", damage: 1390, wn8: 1165 },
+    { income: 11825, level: "Ⅸ级", country: "S系/苏联", name: "212工程", damage: 1074, wn8: 939 },
+    { income: 9266, level: "Ⅸ级", country: "D系/德国", name: "虎式自行火炮", damage: 1057, wn8: 955 },
+    { income: 7102, level: "X级", country: "Y系/英国", name: "征服者GC", damage: 1139, wn8: 848 }
+];
+
+const levelToNumber = { "Ⅴ级": 5, "Ⅵ级": 6, "Ⅶ级": 7, "Ⅷ级": 8, "Ⅸ级": 9, "X级": 10 };
+tankData.sort((a, b) => b.income - a.income);
+
+function getWN8Level(wn8) {
+    if (wn8 >= 1500) return { class: "good", text: "优秀" };
+    if (wn8 >= 1000) return { class: "average", text: "平均" };
+    return { class: "poor", text: "一般" };
+}
+
+function normalizeLevel(level) {
+    const m = { "Ⅴ级": "v", "Ⅵ级": "vi", "Ⅶ级": "vii", "Ⅷ级": "viii", "Ⅸ级": "ix", "X级": "x" };
+    return m[level] || level.toLowerCase().replace('级', '');
+}
+
+function renderTankTable(data) {
+    const c = document.getElementById('tankList');
+    c.innerHTML = '';
+    data.forEach(tank => {
+        const w = getWN8Level(tank.wn8);
+        const row = document.createElement('tr');
+        row.setAttribute('data-level', normalizeLevel(tank.level));
+        row.setAttribute('data-country', tank.country);
+        row.setAttribute('data-name', tank.name);
+        row.setAttribute('data-income', tank.income);
+        row.setAttribute('data-damage', tank.damage);
+        row.setAttribute('data-wn8', tank.wn8);
+        row.setAttribute('data-level-raw', tank.level);
+        row.innerHTML = `
+            <td><div class="tank-name">${tank.name}</div></td>
+            <td><span class="level-cell">${tank.level}</span></td>
+            <td class="country-cell">${tank.country}</td>
+            <td class="damage-cell">${tank.damage}</td>
+            <td class="wn8-cell">${tank.wn8}<span class="wn8-badge ${w.class}">${w.text}</span></td>
+            <td class="income-cell">${tank.income.toLocaleString()}</td>`;
+        c.appendChild(row);
+    });
+}
+
+renderTankTable(tankData);
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        const f = this.dataset.filter;
+        document.querySelectorAll('#tankList tr').forEach(r => {
+            r.style.display = f === 'all' || r.dataset.level === f ? '' : 'none';
+        });
+    });
+});
+
+document.getElementById('searchInput').addEventListener('input', function() {
+    const t = this.value.toLowerCase();
+    document.querySelectorAll('#tankList tr').forEach(r => {
+        const ok = r.dataset.name.toLowerCase().includes(t)
+                || r.dataset.country.toLowerCase().includes(t)
+                || r.dataset.level.includes(t);
+        r.style.display = ok ? '' : 'none';
+    });
+});
+
+let currentSort = { column: 'income', direction: 'desc' };
+
+document.addEventListener('DOMContentLoaded', () => {
+    const h = document.querySelector('th[data-sort="income"]');
+    if (h) h.textContent += ' ↓';
+});
+
+document.querySelectorAll('th.sortable').forEach(h => {
+    h.addEventListener('click', function() {
+        const col = this.dataset.sort;
+        const rows = Array.from(document.querySelectorAll('#tankList tr:not([style*="none"])'));
+        let dir = currentSort.column === col ? (currentSort.direction === 'asc' ? 'desc' : 'asc') : 'asc';
+        currentSort = { column: col, direction: dir };
+        document.querySelectorAll('th.sortable').forEach(th => { th.textContent = th.textContent.replace(/ [↑↓]$/, ''); });
+        this.textContent += dir === 'asc' ? ' ↑' : ' ↓';
+        rows.sort((a, b) => {
+            let av, bv;
+            if (col === 'level') { av = levelToNumber[a.dataset.levelRaw]; bv = levelToNumber[b.dataset.levelRaw]; }
+            else if (col === 'name' || col === 'country') { av = a.dataset[col].toLowerCase(); bv = b.dataset[col].toLowerCase(); }
+            else { av = parseFloat(a.dataset[col]); bv = parseFloat(b.dataset[col]); }
+            return dir === 'asc' ? (av > bv ? 1 : -1) : (av < bv ? 1 : -1);
+        });
+        const tbody = document.getElementById('tankList');
+        rows.forEach(r => tbody.appendChild(r));
+    });
+});
+</script>
+<script src="js/common.js"></script>
+</body>
+</html>

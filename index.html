@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIMP-WOT 工具集</title>
+    <link rel="stylesheet" href="css/common.css">
+    <style>
+        /* --- Index Page Styles --- */
+        .hero {
+            text-align: center;
+            padding: 40px 20px 30px;
+        }
+        .hero h1 {
+            color: var(--color-primary);
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .hero .tagline {
+            color: var(--color-text-light);
+            font-size: 16px;
+            margin-bottom: 25px;
+        }
+        .logo-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+        .taobao-link {
+            display: inline-block;
+            padding: 12px 28px;
+            background: #ff4400;
+            color: #fff;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all .3s;
+            box-shadow: 0 3px 10px rgba(255,68,0,0.2);
+        }
+        .taobao-link:hover {
+            background: #e63e00;
+            color: #fff;
+            transform: translateY(-2px);
+        }
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .tool-card {
+            background: #f5f5f5;
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid var(--color-primary-light);
+            transition: transform .3s, box-shadow .3s;
+        }
+        .tool-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--color-primary);
+        }
+        .tool-card .tool-title {
+            font-size: 18px;
+            color: var(--color-primary);
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .tool-card .tool-desc {
+            color: var(--color-text-light);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        .tool-card .tool-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: var(--color-primary);
+            color: #fff;
+            border-radius: 5px;
+            font-size: 15px;
+            transition: background .3s;
+        }
+        .tool-card .tool-link:hover {
+            background: var(--color-primary-dark);
+            color: #fff;
+        }
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 28px; }
+            .tools-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="site-header">
+    <a href="index.html" class="logo">
+        <img src="assets/images/your-logo.png" alt="SIMP Logo">
+        <span>SIMP for WOT</span>
+    </a>
+</header>
+
+<main class="page-container">
+    <div class="content-card">
+        <div class="hero">
+            <img src="assets/images/your-logo.png" alt="SIMP Logo" class="logo-img">
+            <h1>SIMP-WOT 工具集</h1>
+            <p class="tagline">坦克世界辅助工具与资讯一站式平台</p>
+            <a href="https://7xt2fc2jep40gipw4960wyikz8szhys.taobao.com/" target="_blank" class="taobao-link">👉 SIMP官方直销店铺 👈</a>
+        </div>
+
+        <div class="tools-grid">
+            <div class="tool-card">
+                <div class="tool-title">一键转换特殊昵称</div>
+                <div class="tool-desc">快速生成带特殊符号的昵称，支持4-15位昵称转换，适配游戏昵称修改场景。</div>
+                <a href="special-nickname-converter.html" class="tool-link">立即使用</a>
+            </div>
+            <div class="tool-card">
+                <div class="tool-title">SIMP加速服务一键订阅</div>
+                <div class="tool-desc">便捷订阅SIMP专属加速服务，优化机器人注入慢的问题，提升挂机稳定性。</div>
+                <a href="simp-acceleration-subscribe.html" class="tool-link">立即订阅</a>
+            </div>
+            <div class="tool-card">
+                <div class="tool-title">坦克世界自行火炮收入统计表</div>
+                <div class="tool-desc">统计坦克世界各等级自行火炮的平均收入、伤害、WN8等数据，助力游戏决策。</div>
+                <a href="arty-income-stats.html" class="tool-link">立即使用</a>
+            </div>
+            <div class="tool-card">
+                <div class="tool-title">关于SIMP团队的介绍</div>
+                <div class="tool-desc">了解SIMP团队的发展历程、核心成员、业务范围及团队理念等详细信息。</div>
+                <a href="about-simp-team.html" class="tool-link">查看详情</a>
+            </div>
+            <div class="tool-card">
+                <div class="tool-title">关于【SYNC】事件</div>
+                <div class="tool-desc">详细解读SIMP SYNC（同步器/作弊器）的停止服务事件背景、原因及相关影响。</div>
+                <a href="about-sync-incident.html" class="tool-link">查看详情</a>
+            </div>
+            <div class="tool-card">
+                <div class="tool-title">价格调整与安全发展计划(公告)</div>
+                <div class="tool-desc">查看SIMP艺术机器人（artybot）产品价格调整详情、安全发展规划及核心运营规则等公告内容。</div>
+                <a href="price-adjustment-announcement.html" class="tool-link">查看公告</a>
+            </div>
+            <div class="tool-card">
+                <div class="tool-title">ARTYBOT 艺术机器人 - 更新日志</div>
+                <div class="tool-desc">查看ARTYBOT艺术机器人的版本更新记录、BUG修复及功能优化等详细信息。</div>
+                <a href="changelog.html" class="tool-link">查看日志</a>
+            </div>
+            <div class="tool-card">
+                <div class="tool-title">SIMP账户使用说明</div>
+                <div class="tool-desc">详细介绍SIMP账户的绑定规则、多开规则、激活码使用、后台登录等核心使用说明。</div>
+                <a href="simp-account-guide.html" class="tool-link">查看详情</a>
+            </div>
+            <div class="tool-card">
+                <div class="tool-title">封号情况与规避方法全解析</div>
+                <div class="tool-desc">详细解析坦克世界封号类型、判定依据、规避方法，以及WTR评级核心说明，助力降低账号封禁风险。</div>
+                <a href="ban-prevention-guide.html" class="tool-link">查看详情</a>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script src="js/common.js"></script>
+</body>
+</html>

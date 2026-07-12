@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>一键转换特殊昵称 - SIMP-WOT</title>
+    <link rel="stylesheet" href="css/common.css">
+    <style>
+        .version-date { text-align: center; color: var(--color-text-light); font-size: 13px; margin-bottom: 20px; }
+        .input-result-group { display: flex; gap: 15px; margin-bottom: 15px; }
+        .input-group, .result-group { flex: 1; }
+        label { display: block; margin-bottom: 5px; color: var(--color-text-light); font-weight: bold; font-size: 14px; }
+        input[type="text"] {
+            width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;
+            font-size: 15px; outline: none; transition: border-color .3s;
+        }
+        input[type="text"]:focus { border-color: #007bff; }
+        #result {
+            width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;
+            font-size: 15px; outline: none; background: #fff; user-select: none;
+        }
+        .btn-group { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
+        .btn-group button { width: 100%; padding: 10px; border: none; border-radius: 5px; font-size: 15px; cursor: pointer; color: #fff; transition: background .3s; }
+        .convert-btn { background: #0d6efd; }
+        .convert-btn:hover { background: #0b5ed7; }
+        .copy-btn { background: #198754; }
+        .copy-btn:hover { background: #157347; }
+        .clear-btn { background: #dc3545; }
+        .clear-btn:hover { background: #c82333; }
+        .clear-btn:disabled { background: #6c757d; cursor: not-allowed; }
+        .link-group { display: flex; gap: 8px; margin-bottom: 15px; }
+        .link-btn { display: inline-block; padding: 10px; color: #fff; font-size: 15px; border-radius: 5px; transition: background .3s; flex: 1; text-align: center; text-decoration: none; }
+        .link-btn.query { background: #17a2b8; }
+        .link-btn.query:hover { background: #138496; }
+        .link-btn.change { background: #28a745; }
+        .link-btn.change:hover { background: #218838; }
+        .link-btn.art { background: #6f42c1; }
+        .link-btn.art:hover { background: #5a32a3; }
+        @media (max-width: 576px) {
+            .input-result-group { flex-direction: column; }
+            .link-group { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="site-header">
+    <a href="index.html" class="logo">
+        <img src="assets/images/your-logo.png" alt="SIMP Logo">
+        <span>SIMP for WOT</span>
+    </a>
+    <a href="index.html" class="back-link">← 返回首页</a>
+</header>
+
+<main class="page-container">
+    <div class="content-card">
+        <h1 class="page-title">一键转换特殊昵称</h1>
+        <div class="version-date">
+            <span>版本号：v1.0.4</span> | <span>更新日期：2026-05-03</span>
+        </div>
+
+        <div class="input-result-group">
+            <div class="input-group">
+                <label for="nickname">请输入昵称（4-15位）：</label>
+                <input type="text" id="nickname" placeholder="例如：小明同学" maxlength="15">
+            </div>
+            <div class="result-group">
+                <label for="result">转换后的昵称：</label>
+                <input type="text" id="result" readonly onselectstart="return false" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+            </div>
+        </div>
+
+        <div class="btn-group">
+            <button id="convertBtn" class="convert-btn">转换昵称</button>
+            <button id="copyBtn" class="copy-btn">复制昵称</button>
+            <button id="clearBtn" class="clear-btn" disabled>清除内容</button>
+        </div>
+
+        <div class="notice-box">
+            <div class="notice-title">注意事项：</div>
+            <ul>
+                <li>1. 更改特殊昵称后，其他玩家无法通过正常搜索找到并添加自己为好友。</li>
+                <li>2. 选择重名昵称时，不要选择WTR在7000以上的玩家，防止暴露。因为这类玩家十分在意自身账户数据，会定期查看账户信息，且账户活跃度极高。</li>
+                <li>3. 定期修改昵称（1个月修改一次或每次封号结束后修改一次），以防被其他玩家针对。</li>
+                <li>4. 修改特殊昵称只是给予视觉上的效果，无法100%避免封号。</li>
+                <li>5. 每个游戏账户都有一个无法更改的ID码，若ID码被记住，更改昵称也于事无补。</li>
+            </ul>
+        </div>
+
+        <div class="link-group">
+            <a href="https://wotgame.cn/zh-cn/community/accounts/#wot&at_search=" target="_blank" class="link-btn query">玩家查询地址</a>
+            <a href="https://wgn.wggames.cn/personal/" target="_blank" class="link-btn change">昵称更改地址</a>
+            <a href="https://7xt2fc2jep40gipw4960wyikz8szhys.taobao.com/" target="_blank" class="link-btn art">艺术购买地址</a>
+        </div>
+    </div>
+</main>
+
+<script>
+    const nicknameInput = document.getElementById('nickname');
+    const convertBtn = document.getElementById('convertBtn');
+    const resultInput = document.getElementById('result');
+    const copyBtn = document.getElementById('copyBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const symbols = ['\u200E', '\u200F'];
+
+    function getRandomSymbol() { return symbols[Math.floor(Math.random() * symbols.length)]; }
+    function showAlert(text, ok) { alert((ok ? '✅ ' : '❌ ') + text); }
+
+    nicknameInput.addEventListener('input', function() { clearBtn.disabled = !this.value.trim(); });
+    clearBtn.addEventListener('click', function() { nicknameInput.value = ''; resultInput.value = ''; clearBtn.disabled = true; });
+    convertBtn.addEventListener('click', function() {
+        const n = nicknameInput.value.trim();
+        if (n.length < 4 || n.length > 15) { showAlert('请输入4-15位的昵称！'); resultInput.value = ''; return; }
+        resultInput.value = getRandomSymbol() + n;
+        showAlert('转换成功！', true);
+    });
+    copyBtn.addEventListener('click', function() {
+        const t = resultInput.value;
+        if (!t) { showAlert('请先转换生成昵称！'); return; }
+        try { navigator.clipboard.writeText(t).then(() => showAlert('复制成功！', true)); }
+        catch(e) { const ta = document.createElement('textarea'); ta.value = t; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); showAlert('复制成功！', true); }
+    });
+</script>
+<script src="js/common.js"></script>
+</body>
+</html>

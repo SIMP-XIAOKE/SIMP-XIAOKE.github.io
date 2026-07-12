@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>封号情况与规避方法全解析 - SIMP-WOT</title>
+    <link rel="stylesheet" href="css/common.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <style>
+        .danger-text { color: #dc3545; font-weight: 600; }
+        .danger-text::after { content: "⚠"; margin-left: 5px; font-size: .9em; }
+        .warning-text { color: #fd7e14; font-weight: 600; }
+        .warning-text::after { content: "🔶"; margin-left: 5px; font-size: .9em; }
+        .safe-text { color: #28a745; font-weight: 600; }
+        .safe-text::after { content: "✅"; margin-left: 5px; font-size: .9em; }
+        .table-custom { border-radius: 8px; overflow: hidden; border: 1px solid #dee2e6; }
+        .table-custom th { background: linear-gradient(180deg,#e9ecef,#dee2e6); color: #495057; font-weight: 600; border: none; padding: 12px 15px; }
+        .table-custom td { padding: 12px 15px; border-color: #f0f2f5; }
+        .table-custom tr:hover { background-color: #f8f9fa; }
+        .list-group-item { border: 1px solid #f0f2f5; border-radius: 6px; padding: 12px 15px; transition: all .2s; margin-bottom: 6px; }
+        .list-group-item:hover { background-color: #f8f9fa; border-left: 3px solid #0d6efd; }
+        .list-group-numbered .list-group-item { counter-increment: lc; position: relative; padding-left: 40px; }
+        .list-group-numbered .list-group-item::before { content: counter(lc); position: absolute; left: 15px; top: 50%; transform: translateY(-50%); width: 24px; height: 24px; background: #0d6efd; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: .9rem; font-weight: 600; }
+        .wtr-img { max-width: 800px; width: 100%; margin: 30px auto; display: block; border: 1px solid #eee; padding: 15px; border-radius: 8px; box-shadow: var(--shadow-sm); }
+        .card { border: none; border-radius: 8px; box-shadow: var(--shadow-sm); }
+        .card-title { color: #0d6efd; font-weight: 600; margin-bottom: 15px; }
+        .card-title::before { content: "\f0eb"; font-family: FontAwesome; font-size: 1.1rem; margin-right: 8px; }
+        .footer-thanks { text-align: center; color: var(--color-text-light); margin: 30px 0 10px; padding-top: 20px; border-top: 1px solid #e9ecef; font-size: .95rem; }
+    </style>
+</head>
+<body>
+
+<header class="site-header">
+    <a href="index.html" class="logo">
+        <img src="assets/images/your-logo.png" alt="SIMP Logo">
+        <span>SIMP for WOT</span>
+    </a>
+    <a href="index.html" class="back-link">← 返回首页</a>
+</header>
+
+<main class="page-container">
+    <!-- Card 1: 封号核心情况 -->
+    <div class="content-card">
+        <h1 class="page-title">坦克世界封号情况与规避方法全解析</h1>
+        <p class="page-subtitle">更新日期：2025年10月31日</p>
+        <p style="text-align:center;color:#6c757d;font-size:1rem;margin-bottom:20px;">以下内容依据360国服的状况进行编写，其它服务器可能存在差异。</p>
+
+        <h2 class="section-heading">一、封号核心情况</h2>
+
+        <h3 class="sub-heading">1.1 封号类型、时长及系统提示</h3>
+        <div class="table-responsive mb-4">
+            <table class="table table-bordered table-hover table-custom">
+                <thead>
+                    <tr>
+                        <th width="20%">封号类型</th>
+                        <th width="35%">封号时长</th>
+                        <th width="45%">系统封号提示</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>违规插件</td>
+                        <td>第一次封禁7天，<span class="danger-text">第二次永久封禁</span></td>
+                        <td>未遵循公平游戏政策</td>
+                    </tr>
+                    <tr>
+                        <td>送死挂机</td>
+                        <td><span class="danger-text">第一次直接永久封禁</span></td>
+                        <td>检测到使用脚本的违规行为</td>
+                    </tr>
+                    <tr>
+                        <td>透视卡房</td>
+                        <td><span class="warning-text">第一次封禁180天</span></td>
+                        <td>未遵循公平游戏政策</td>
+                    </tr>
+                    <tr>
+                        <td>伤害队友</td>
+                        <td>第一次封禁1小时，后续<span class="warning-text">逐级递增</span>（1天、3天、7天、30天等）</td>
+                        <td>误伤队友</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="sub-heading">1.2 官方封号判定依据</h3>
+        <ul class="list-group list-group-flush mb-4">
+            <li class="list-group-item"><i class="fa fa-check-circle text-primary me-2"></i> 根据系统内的特定文件进行行为判断；</li>
+            <li class="list-group-item"><i class="fa fa-check-circle text-primary me-2"></i> 根据其他玩家举报并提供的录像文件进行核实判断；</li>
+            <li class="list-group-item"><i class="fa fa-check-circle text-primary me-2"></i> 根据服务器后台筛选的异常数据进行判断。</li>
+        </ul>
+
+        <h3 class="sub-heading">1.3 封号概率与数据筛查规则</h3>
+        <p class="mb-3">官方封号并非实时检测，会<span class="warning-text">抽取不同时间段的异常数据</span>进行筛选，再通过人工审核执行封号操作。</p>
+        <p>举例：2025年7月执行的封号，官方可能调取2025年1月、3月某几周的游戏数据进行筛查分。所以为什么部分玩家会说自己什么事时都没有，很安全。</p>
+
+        <h3 class="sub-heading">1.4 艺术机器人当前封号现状</h3>
+        <p>目前艺术机器人存在少量封号问题，每期封号名单中仅有约1%的用户被封禁，经分析大概率是被其他玩家针对性举报导致。</p>
+    </div>
+
+    <!-- Card 2: 规避封号方法 -->
+    <div class="content-card">
+        <h2 class="section-heading">二、规避封号 降低封禁风险</h2>
+
+        <h3 class="sub-heading">2.1 通用封号规避方法</h3>
+        <ul class="list-group list-group-flush mb-5">
+            <li class="list-group-item"><span class="safe-text">★ 核心操作</span>：使用更改特殊昵称工具，每月或每次封号后更改一次游戏昵称，避免被其他玩家针与官方针对；</li>
+            <li class="list-group-item"><span class="safe-text">★ 核心操作</span>：每天/隔天手动打几十把游戏，模拟正常玩家行为；</li>
+            <li class="list-group-item"><span class="safe-text">★ 设置操作</span>：减少每日挂机次数，可设定艺术机器人延长比赛开始时间，或仅挂机半天；</li>
+            <li class="list-group-item"><span class="danger-text">★ 其它操作</span>：分享战绩时必须打码，以防被其它玩家针对。(如游戏昵称、军团名)</li>
+            <li class="list-group-item"><span class="danger-text">★ 其它操作</span>：不要使用任何违规插件，同时避免辱骂其他玩家等拉仇恨的操作，以防被针对。</li>
+        </ul>
+
+        <h3 class="sub-heading">2.2 新号全系毕业的方法</h3>
+        <p class="mb-3">以下是<span class="safe-text">最快、最优、最安全</span>达成全系毕业的方法并且可保证WTR稳定在5000以上。具体步骤如下：</p>
+        <ol class="list-group list-group-numbered mb-3">
+            <li class="list-group-item">新号状态下，使用艺术机器人挂够<span class="warning-text">5000万个体经验</span>（该数值约需250天完成）；</li>
+            <li class="list-group-item">刷够个体经验后立即停止挂机，先躲过2-3次官方封号潮，待账号处于安全状态后，等待圣诞节期间充值<span class="warning-text">1万元</span>；</li>
+            <li class="list-group-item">利用游戏内<span class="warning-text">1:80-120金币</span>与<span class="warning-text">1:40全局</span>的兑换比例，直接兑换几千万全局经验点车（换算后1元=4500点经验，比工作室代练更划算）；</li>
+            <li class="list-group-item">按上述步骤操作，可轻松实现1年达成全系，且账号全程处于安全状态。</li>
+        </ol>
+        <p class="text-secondary fst-italic">注：以上方法仅作参考，可根据自身实际游戏情况灵活调整。</p>
+    </div>
+
+    <!-- Card 3: WTR评级 -->
+    <div class="content-card">
+        <h2 class="section-heading">三、研究与WTR评级核心说明</h2>
+
+        <h3 class="sub-heading">3.1 独家研究结论</h3>
+        <ul class="list-group list-group-flush mb-5">
+            <li class="list-group-item"><span class="danger-text">严禁</span>：使用任何违规插件，会提高封号概率；</li>
+            <li class="list-group-item"><span class="warning-text">避免使用</span>：WTR评级低于2000左右的脚本，此类脚本易被官方检测；</li>
+            <li class="list-group-item"><span class="safe-text">亲测有效</span>：账号可24小时挂机，实际测试24小时挂机2年账号仍正常使用，若不放心可仅挂机半天；</li>
+            <li class="list-group-item"><span class="safe-text">个人见解</span>：官方不会轻易大规模封号：封号是把双刃剑，虽然优化游戏环境、安抚正常玩家，但会导致官方财报数据下滑，所以官方不会轻易使用封号手段，在后台，什么都能看见，都是明牌，官方并非视而不见，都是跟利益挂钩的；坦克世界上手难度还是很高的，对新玩家很不友好，所以官方是不会大规模进行永久封禁措施，这可能会导致加快关服速度，所以基本上封禁7天的居多，然后定期封禁一些玩家来安抚正常玩家。这就是官方的高明之处，既要又要。</li>
+        </ul>
+
+        <h3 class="sub-heading">3.2 WTR评级（坦克世界评级）全解析</h3>
+        <p class="mb-4">WTR是<span class="warning-text">World of Tanks Rating</span>的缩写，即坦克世界评级，是评估玩家游戏表现的核心指标，也是判断挂机行为的重要依据。</p>
+
+        <h4 style="font-size:1.1rem;font-weight:600;color:#495057;margin:30px 0 15px;">▍WTR评级简单描述</h4>
+        <ul class="list-group list-group-flush mb-4">
+            <li class="list-group-item">通过WTR评级可直观判断账号是否存在挂机行为；</li>
+            <li class="list-group-item">正常玩家的WTR评级通常在<span class="safe-text">5000-6000左右</span>；</li>
+            <li class="list-group-item">有挂机行为的玩家WTR评级通常在<span class="danger-text">3000以下</span>；</li>
+            <li class="list-group-item">使用艺术机器人的玩家WTR评级通常稳定在<span class="safe-text">5000左右</span>。</li>
+        </ul>
+
+        <div class="text-center mb-5">
+            <p class="mb-2 text-muted">WTR评级数据参考图</p>
+            <img src="assets/images/9.png" alt="WTR评级数据参考图-玩家行为与评级对应关系" class="wtr-img mb-3">
+        </div>
+
+        <h4 style="font-size:1.1rem;font-weight:600;color:#495057;margin:30px 0 15px;">▍WTR评级核心信息</h4>
+        <div class="row g-4 mb-3">
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">计算方式</h5>
+                        <p class="card-text small">单独计算每辆坦克的评级，将各坦克评级（按战斗场数）与坦克等级系数相乘，求和后除以账号总战斗场数，再乘以最佳坦克表现系数，最终得出个人WTR评级。</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">数据范围</h5>
+                        <p class="card-text small">仅基于<span class="warning-text">标准模式</span>数据计算，不同模式玩法差异大，仅计入标准模式可保证统计数据的一致性。</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">作用体现</h5>
+                        <p class="card-text small">反映玩家整体水平，匹配同评级队友；展示传奇武装配置；可查看自身在全服的排名，及单坦克的使用水平。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-thanks">
+        <p>感谢各位阅读此篇文章，如有错误或不同的看法，请及时指出与交流。谢谢！！！</p>
+    </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+<script src="js/common.js"></script>
+</body>
+</html>
