@@ -59,7 +59,6 @@ img { max-width: 100%; height: auto; }
     align-items: center;
     gap: 10px;
     text-decoration: none;
-    color: var(--color-primary);
 }
 
 .site-header .logo img {
@@ -72,8 +71,11 @@ img { max-width: 100%; height: auto; }
 .site-header .logo span {
     font-size: 18px;
     font-weight: 700;
+    color: #000;
 }
-
+.site-header .logo:hover span {
+    color: #000;
+}
 .site-header .back-link {
     display: inline-flex;
     align-items: center;
